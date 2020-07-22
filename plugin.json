@@ -1,0 +1,24 @@
+{
+  "slug": "Gweltou",
+  "name": "Gweltou",
+  "version": "1.0.0",
+  "license": "MIT",
+  "author": "Gweltaz D-G",
+  "authorEmail": "gweltou@hotmail.com",
+  "authorUrl": "",
+  "pluginUrl": "",
+  "manualUrl": "",
+  "sourceUrl": "",
+  "donateUrl": "",
+  "changelogUrl": "",
+  "modules": [
+    {
+      "slug": "Gaussian",
+      "name": "Gaussian",
+      "description": "Random gaussian CV generator",
+      "tags": [
+        "random gauss"
+      ]
+    }
+  ]
+}
