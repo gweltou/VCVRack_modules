@@ -23,7 +23,7 @@ struct Gaussian : Module {
 	};
 
     dsp::SchmittTrigger trigTrigger;
-	float lastValue = 0.f;
+	//float lastValue = 0.f;
 	float value = 0.f;
 	float mu;
 	float sigma;
@@ -32,24 +32,33 @@ struct Gaussian : Module {
 		config(NUM_PARAMS, NUM_INPUTS, NUM_OUTPUTS, NUM_LIGHTS);
 		configParam(MU_PARAM, -1.f, 1.f, 0.f, "Mu");
 		configParam(SIGMA_PARAM, 0.f, 1.f, 0.1f, "Sigma");
-		configParam(OFFSET_PARAM, 0.f, 1.f, 1.f, "Offset");
+		configParam(OFFSET_PARAM, 0.f, 1.f, 0.f, "Offset");
 	}
 
 	void process(const ProcessArgs& args) override {
 	    if (inputs[TRIGGER_INPUT].isConnected()) {
-			// Trigger
+	        // Trigger input is connected
 			if (trigTrigger.process(rescale(inputs[TRIGGER_INPUT].getVoltage(), 0.1f, 2.f, 0.f, 1.f))) {
 				trigger();
 			}
+		} else {
+		    // Trigger input is not connected, generate noise
+		    if (outputs[CV_OUTPUT].isConnected()) {
+		        sample();
+		    }
 		}
 		
 		outputs[CV_OUTPUT].setVoltage(value * 10.f);
 	}
 	
 	void trigger() {
-	    lastValue = value;
+	    //lastValue = value;
 	    
-        if (inputs[SIGMACV_INPUT].isConnected()) {
+        sample();
+	}
+	
+	void sample() {
+	    if (inputs[SIGMACV_INPUT].isConnected()) {
             sigma = simd::fmax(0.f, inputs[SIGMACV_INPUT].getVoltage(0)) / 10.f;
         } else {
             sigma = params[SIGMA_PARAM].getValue();
@@ -60,8 +69,8 @@ struct Gaussian : Module {
         } else {
             mu = params[MU_PARAM].getValue();
         }
-        
-        if (params[OFFSET_PARAM].getValue() == 0.f) {
+	    
+	    if (params[OFFSET_PARAM].getValue() == 0.f) {
             // Bipolar
             value = mu + random::normal() * sigma;
         } else {

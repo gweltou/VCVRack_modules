@@ -17,7 +17,7 @@
       "name": "Gaussian",
       "description": "Random gaussian CV generator",
       "tags": [
-        "random gauss"
+        "Random", "Noise", "Sample and hold"
       ]
     }
   ]
