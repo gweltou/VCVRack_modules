@@ -8,3 +8,4 @@ You have control over the standard deviation (sigma) and the mean of the distrib
 
 When the trigger input is not connected, the module outputs gaussian noise (which takes more CPU time than other kind of noises...)
 
+![Plate](/manual/gaussian_plate.png)
