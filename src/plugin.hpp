@@ -9,4 +9,5 @@ extern Plugin* pluginInstance;
 
 // Declare each Model, defined in each module source file
 extern Model* modelGaussian;
-
+extern Model* modelWobble;
+extern Model* modelHookeOsc;

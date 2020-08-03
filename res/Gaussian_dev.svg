@@ -16,8 +16,9 @@
    version="1.1"
    id="svg8"
    inkscape:version="0.92.4 (5da689c313, 2019-01-14)"
-   sodipodi:docname="Gaussian2_dev.svg"
-   style="enable-background:new">
+   sodipodi:docname="Gaussian_dev.svg"
+   style="enable-background:new"
+   enable-background="new">
   <defs
      id="defs2">
     <linearGradient
@@ -44,11 +45,11 @@
      borderopacity="1.0"
      inkscape:pageopacity="0.0"
      inkscape:pageshadow="2"
-     inkscape:zoom="1.4"
-     inkscape:cx="-129.95694"
-     inkscape:cy="284.01123"
+     inkscape:zoom="0.7"
+     inkscape:cx="-319.89256"
+     inkscape:cy="456.47569"
      inkscape:document-units="mm"
-     inkscape:current-layer="layer2"
+     inkscape:current-layer="layer1"
      showgrid="false"
      units="mm"
      inkscape:snap-bbox="true"
@@ -133,7 +134,7 @@
        aria-label="μ"
        style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:10.58333302px;line-height:1.25;font-family:'Tlwg Typewriter';-inkscape-font-specification:'Tlwg Typewriter';letter-spacing:0px;word-spacing:0px;display:inline;fill:#4b461e;fill-opacity:1;stroke:none;stroke-width:0.26458332"
        id="text60-2"
-       transform="matrix(0.66446833,0,0,0.66546481,-2.5981386,111.41977)">
+       transform="matrix(0.56998918,0,0,0.57084397,-0.95827262,130.33488)">
       <path
          d="m 12.589973,207.89346 v -7.98917 h 0.950847 v 3.59668 q 0,0.7493 0.356567,1.13171 0.356567,0.38241 1.054199,0.38241 0.764811,0 1.147217,-0.43409 0.387573,-0.43408 0.387573,-1.30224 v -3.37447 h 0.950847 v 4.45451 q 0,0.31005 0.08785,0.45992 0.09302,0.14469 0.28422,0.14469 0.04651,0 0.129191,-0.0258 0.08268,-0.031 0.227376,-0.093 v 0.76481 q -0.211873,0.11886 -0.403076,0.1757 -0.186035,0.0569 -0.366903,0.0569 -0.356567,0 -0.56844,-0.20154 -0.211874,-0.20154 -0.289388,-0.61495 -0.258382,0.40824 -0.63562,0.61495 -0.372071,0.20154 -0.8785,0.20154 -0.527099,0 -0.89917,-0.20154 -0.366902,-0.20154 -0.583943,-0.60461 v 2.8577 z"
          style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-family:'Tlwg Mono';-inkscape-font-specification:'Tlwg Mono';fill:#4b461e;fill-opacity:1;stroke-width:0.26458332"
@@ -227,7 +228,7 @@
        aria-label="σ"
        style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:10.58333302px;line-height:1.25;font-family:'Tlwg Typewriter';-inkscape-font-specification:'Tlwg Typewriter';letter-spacing:0px;word-spacing:0px;fill:#4b461e;fill-opacity:1;stroke:none;stroke-width:0.26458332"
        id="text60"
-       transform="matrix(0.77013415,0,0,0.67199869,-4.1649779,58.682599)">
+       transform="matrix(0.60759445,0,0,0.53017085,-1.6777142,90.978532)">
       <path
          inkscape:connector-curvature="0"
          d="m 15.051869,228.4667 q -0.785481,0 -1.209228,0.56844 -0.444417,0.59428 -0.444417,1.57613 0,1.0387 0.439249,1.63814 0.444417,0.59428 1.214396,0.59428 0.759644,0 1.204061,-0.59944 0.444417,-0.59945 0.444417,-1.63298 0,-0.94568 -0.444417,-1.57613 -0.408244,-0.56844 -1.204061,-0.56844 z m 0,-0.75448 h 3.15743 v 0.95085 h -1.064534 q 0.563273,0.80615 0.563273,1.9482 0,1.4211 -0.707967,2.22726 -0.707967,0.81132 -1.948202,0.81132 -1.245402,0 -1.948201,-0.81132 -0.707967,-0.80616 -0.707967,-2.22726 0,-1.43144 0.707967,-2.23242 0.583944,-0.66663 1.948201,-0.66663 z"
@@ -286,7 +287,7 @@
        inkscape:label="mu" />
     <circle
        r="4"
-       cy="52.640156"
+       cy="52.110989"
        cx="7.6199999"
        id="circle4951"
        style="display:inline;opacity:1;vector-effect:none;fill:#00ff00;fill-opacity:1;fill-rule:evenodd;stroke:none;stroke-width:1;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1;paint-order:normal;enable-background:new"

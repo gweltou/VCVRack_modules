@@ -39,7 +39,7 @@ struct Gaussian : Module {
 	    if (inputs[TRIGGER_INPUT].isConnected()) {
 	        // Trigger input is connected
 			if (trigTrigger.process(rescale(inputs[TRIGGER_INPUT].getVoltage(), 0.1f, 2.f, 0.f, 1.f))) {
-				trigger();
+				sample();
 			}
 		} else {
 		    // Trigger input is not connected, generate noise
@@ -51,31 +51,27 @@ struct Gaussian : Module {
 		outputs[CV_OUTPUT].setVoltage(value * 10.f);
 	}
 	
-	void trigger() {
-	    //lastValue = value;
-	    
-        sample();
-	}
-	
 	void sample() {
+	    sigma = params[SIGMA_PARAM].getValue();
 	    if (inputs[SIGMACV_INPUT].isConnected()) {
-            sigma = simd::fmax(0.f, inputs[SIGMACV_INPUT].getVoltage(0)) / 10.f;
-        } else {
-            sigma = params[SIGMA_PARAM].getValue();
+            sigma += inputs[SIGMACV_INPUT].getVoltage(0) / 10.f;
+            sigma = clamp(sigma, 0.f, 1.f);
         }
         
+        mu = params[MU_PARAM].getValue();
         if (inputs[MUCV_INPUT].isConnected()) {
-            mu = inputs[MUCV_INPUT].getVoltage(0) / 10.f;
-        } else {
-            mu = params[MU_PARAM].getValue();
+            mu += inputs[MUCV_INPUT].getVoltage(0) / 10.f;
+            mu = clamp(mu, -1.f, 1.f);
         }
 	    
 	    if (params[OFFSET_PARAM].getValue() == 0.f) {
             // Bipolar
-            value = mu + random::normal() * sigma;
+            value = random::normal() * sigma;
+            value = mu + clamp(value, -0.5f, 0.5f);
         } else {
             // Unipolar
-            value = mu + simd::fabs(random::normal()) * sigma;
+            value = std::fabs(random::normal()) * sigma;
+            value = mu + clamp(value, 0.f, 1.f);
         }
 	}
 };

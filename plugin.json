@@ -17,7 +17,24 @@
       "name": "Gaussian",
       "description": "Random gaussian CV generator",
       "tags": [
-        "Random", "Noise", "Sample and hold"
+        "Random",
+        "Noise",
+        "Sample and hold"
+      ]
+    },
+    {
+      "slug": "Wobble",
+      "name": "Wobble",
+      "description": "A tape-like wobbler",
+      "tags": []
+    },
+    {
+      "slug": "HookeOsc",
+      "name": "HookeOsc",
+      "description": "",
+      "tags": [
+        "VCO",
+        "Polyphonic"
       ]
     }
   ]
