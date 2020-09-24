@@ -11,6 +11,7 @@ struct HookeOsc : Module {
 		FREQ_PARAM,
 		KCVMOD_PARAM,
 		CHAOS_PARAM,
+		CHAOSFREQ_PARAM,
 		SLOW_PARAM,
 		NUM_PARAMS
 	};
@@ -29,10 +30,13 @@ struct HookeOsc : Module {
     
     int currentPolyphony = 1;
 	int loopCounter = 0;
+	float timeCounter = 0.f;
+	
+	bool applyChaos = false;
 	
 	int state[maxPolyphony] = {};
 	float spring_k[maxPolyphony] = {};
-	float spring_kp[maxPolyphony] = {};
+	float spring_kp[maxPolyphony] = {0.f};
 	float vel[maxPolyphony] = {};
 	float value[maxPolyphony] = {};
 	float prev_value[maxPolyphony] = {};
@@ -42,7 +46,8 @@ struct HookeOsc : Module {
 		configParam(SLOW_PARAM, 0.f, 1.f, 0.f, "Slow mode");
 		configParam(FREQ_PARAM, -54.f, 54.f, 0.f, "Frequency", " Hz", dsp::FREQ_SEMITONE, dsp::FREQ_C4, 0.f);
 		configParam(KCVMOD_PARAM, -1.f, 1.f, 0.f, "K/m modulation");
-		configParam(CHAOS_PARAM, 0.f, 0.4f, 0.f, "Chaos");
+		configParam(CHAOS_PARAM, 0.f, 1.f, 0.f, "Chaos amount");
+		configParam(CHAOSFREQ_PARAM, 0.1f, 1.f, 0.1f, "Chaos frequency");
 		
 		// Initialize springs extension
 		for (int i=0; i<maxPolyphony; i++) {
@@ -52,13 +57,14 @@ struct HookeOsc : Module {
 		}
 	}
 	
-	
 	void process(const ProcessArgs& args) override {
+	    timeCounter += args.sampleTime;
 	    
 	    if (loopCounter-- == 0) {
             loopCounter = 3;
             processEvery4Samples(args);
         }
+        
 	    generateOutput();
 	}
 	
@@ -66,15 +72,14 @@ struct HookeOsc : Module {
 	    currentPolyphony = std::max(1, inputs[PITCH_INPUT].getChannels());
         outputs[OUT_OUTPUT].setChannels(currentPolyphony);
         
-	    float chaos = params[CHAOS_PARAM].getValue();
 	    float pitchParam = params[FREQ_PARAM].getValue() / 12.f;
 	    
 	    float slow = params[SLOW_PARAM].getValue();
 	    
-	    float k_mod = 0.f;
-	    if (inputs[KMOD_INPUT].isConnected()) {
-	        k_mod = params[KCVMOD_PARAM].getValue() * inputs[KMOD_INPUT].getVoltage() / 10.f;
-	    }
+	    // CHAOS
+	    float chaos = params[CHAOS_PARAM].getValue() * 10.f;
+	    float chaosFreq = params[CHAOSFREQ_PARAM].getValue() * 0.1f;
+	    
 	    
 	    for (int i=0; i<currentPolyphony; i++) {
 	        
@@ -82,39 +87,44 @@ struct HookeOsc : Module {
 	        float freq = dsp::FREQ_C4 * std::pow(2.f, pitch);
 	        
 	        
-	        // 0.000142465 is the magic number to tune the oscillator
+	        // 6.194130435 is the magic number to tune the oscillator
 	        if (slow == 1.f) {
-	            spring_k[i] = 0.0000005 * freq;
+	            spring_k[i] = freq * args.sampleTime * 0.02173913f;
 	        } else {
-	            //spring_k[i] = freq * 0.000142465 * ((random::normal()-0.45f) * chaos + 1) + k_mod;
-	            spring_k[i] = freq * 0.000142465;
+	            spring_k[i] = freq * args.sampleTime * 6.194130435f;
 	        }
 	        
+	        spring_kp[i] = 0.0f;
 	        if ((state[i] == RAISING) && (value[i] < prev_value[i])) {
 	            // Switch state and apply chaos
 	            state[i] = FALLING;
-	            spring_kp[i] = spring_k[i] * (random::normal()-0.44f) * chaos * 0.7f;
+	            if (random::uniform() < chaosFreq)
+	                spring_kp[i] = spring_k[i] * (random::normal()-0.44f) * chaos * 0.7f;
 	            
 	        } else if ((state[i] == FALLING) && (value[i] > prev_value[i])) {
 	            // Switch state and apply chaos
 	            state[i] = RAISING;
-	            spring_kp[i] = spring_k[i] * (random::normal()-0.44f) * chaos * 0.7f;
+	            if (random::uniform() < chaosFreq)
+	                spring_kp[i] = spring_k[i] * (random::normal()-0.44f) * chaos * 0.7f;
 	        }
-	        //spring_k[i] += spring_k[i] * random::uniform() * chaos * 10.f;
+	        //spring_k[i] += spring_k[i] * chaos;
 	        
-	        spring_k[i] += k_mod;
+	        //spring_k[i] += k_mod;
 	        prev_value[i] = value[i];
         }
 	}
 	
-	void processEvery8Samples(const ProcessArgs& args) {
-	    
-	}
-	
 	void generateOutput() {
 	    float k;
+	    float k_mod = 0.f;
+	    int kmodPolyphony = inputs[KMOD_INPUT].getChannels();
+	    
 	    for (int i=0; i<currentPolyphony; i++) {
-	        k = spring_k[i] + spring_kp[i];
+	        if (kmodPolyphony > 0) {
+	            k_mod = params[KCVMOD_PARAM].getValue() * inputs[KMOD_INPUT].getVoltage(i % kmodPolyphony) * 0.1f;
+	        }
+	        
+	        k = spring_k[i] + k_mod + spring_kp[i];
             vel[i] += -k*k * value[i];
             
             value[i] += vel[i];
@@ -146,6 +156,7 @@ struct HookeOscWidget : ModuleWidget {
 		addParam(createParamCentered<RoundHugeBlackKnob>(mm2px(Vec(12.7, 42.05)), module, HookeOsc::FREQ_PARAM));
 		addParam(createParamCentered<Trimpot>(mm2px(Vec(18.608, 77.487)), module, HookeOsc::KCVMOD_PARAM));
 		addParam(createParamCentered<RoundLargeBlackKnob>(mm2px(Vec(12.7, 96.548)), module, HookeOsc::CHAOS_PARAM));
+		addParam(createParamCentered<Trimpot>(mm2px(Vec(19, 105)), module, HookeOsc::CHAOSFREQ_PARAM));
 
 		addInput(createInputCentered<PJ301MPort>(mm2px(Vec(12.7, 57.089)), module, HookeOsc::PITCH_INPUT));
 		addInput(createInputCentered<PJ301MPort>(mm2px(Vec(8.149, 77.487)), module, HookeOsc::KMOD_INPUT));

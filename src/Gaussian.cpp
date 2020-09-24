@@ -4,7 +4,9 @@
 struct Gaussian : Module {
 	enum ParamIds {
 		MU_PARAM,
+		MUMOD_PARAM,
 		SIGMA_PARAM,
+		SIGMAMOD_PARAM,
 		OFFSET_PARAM,
 		NUM_PARAMS
 	};
@@ -31,7 +33,9 @@ struct Gaussian : Module {
 	Gaussian() {
 		config(NUM_PARAMS, NUM_INPUTS, NUM_OUTPUTS, NUM_LIGHTS);
 		configParam(MU_PARAM, -1.f, 1.f, 0.f, "Mu");
+		configParam(MUMOD_PARAM, -1.f, 1.f, 0.f, "Mu modulation");
 		configParam(SIGMA_PARAM, 0.f, 1.f, 0.1f, "Sigma");
+		configParam(SIGMAMOD_PARAM, 0.f, 1.f, 0.f, "Sigma modulation");
 		configParam(OFFSET_PARAM, 0.f, 1.f, 0.f, "Offset");
 	}
 
@@ -53,14 +57,16 @@ struct Gaussian : Module {
 	
 	void sample() {
 	    sigma = params[SIGMA_PARAM].getValue();
+	    float sigmamod = params[SIGMAMOD_PARAM].getValue();
 	    if (inputs[SIGMACV_INPUT].isConnected()) {
-            sigma += inputs[SIGMACV_INPUT].getVoltage(0) / 10.f;
+            sigma += sigmamod * inputs[SIGMACV_INPUT].getVoltage(0) / 10.f;
             sigma = clamp(sigma, 0.f, 1.f);
         }
         
         mu = params[MU_PARAM].getValue();
+        float mumod = params[MUMOD_PARAM].getValue();
         if (inputs[MUCV_INPUT].isConnected()) {
-            mu += inputs[MUCV_INPUT].getVoltage(0) / 10.f;
+            mu += mumod * inputs[MUCV_INPUT].getVoltage(0) / 10.f;
             mu = clamp(mu, -1.f, 1.f);
         }
 	    
@@ -83,20 +89,20 @@ struct GaussianWidget : ModuleWidget {
 		setPanel(APP->window->loadSvg(asset::plugin(pluginInstance, "res/Gaussian.svg")));
 
 		addChild(createWidget<ScrewSilver>(Vec(RACK_GRID_WIDTH, 0)));
-		addChild(createWidget<ScrewSilver>(Vec(box.size.x - 2 * RACK_GRID_WIDTH, 0)));
-		addChild(createWidget<ScrewSilver>(Vec(RACK_GRID_WIDTH, RACK_GRID_HEIGHT - RACK_GRID_WIDTH)));
 		addChild(createWidget<ScrewSilver>(Vec(box.size.x - 2 * RACK_GRID_WIDTH, RACK_GRID_HEIGHT - RACK_GRID_WIDTH)));
         
-        addParam(createParam<CKSS>(mm2px(Vec(5.2, 13.4)), module, Gaussian::OFFSET_PARAM));
+        addParam(createParam<CKSS>(mm2px(Vec(7.7, 13.4)), module, Gaussian::OFFSET_PARAM));
         
-		addParam(createParamCentered<RoundBlackKnob>(mm2px(Vec(7.62, 36.293)), module, Gaussian::SIGMA_PARAM));
-		addParam(createParamCentered<RoundBlackKnob>(mm2px(Vec(7.62, 69.803)), module, Gaussian::MU_PARAM));
-		
-		addInput(createInputCentered<PJ301MPort>(mm2px(Vec(7.62, 52.64)), module, Gaussian::SIGMACV_INPUT));
-		addInput(createInputCentered<PJ301MPort>(mm2px(Vec(7.62, 86.28)), module, Gaussian::MUCV_INPUT));
-		addInput(createInputCentered<PJ301MPort>(mm2px(Vec(7.62, 99.174)), module, Gaussian::TRIGGER_INPUT));
-		
-		addOutput(createOutputCentered<PJ301MPort>(mm2px(Vec(7.62, 113.475)), module, Gaussian::CV_OUTPUT));
+        addParam(createParamCentered<RoundBlackKnob>(mm2px(Vec(7.62, 35.293)), module, Gaussian::SIGMA_PARAM));
+		addParam(createParamCentered<Trimpot>(mm2px(Vec(15.028, 44.202)), module, Gaussian::SIGMAMOD_PARAM));
+		addParam(createParamCentered<RoundBlackKnob>(mm2px(Vec(12.912, 68.803)), module, Gaussian::MU_PARAM));
+		addParam(createParamCentered<Trimpot>(mm2px(Vec(5.503, 78.306)), module, Gaussian::MUMOD_PARAM));
+
+		addInput(createInputCentered<PJ301MPort>(mm2px(Vec(10.16, 52.64)), module, Gaussian::SIGMACV_INPUT));
+		addInput(createInputCentered<PJ301MPort>(mm2px(Vec(10.16, 86.809)), module, Gaussian::MUCV_INPUT));
+		addInput(createInputCentered<PJ301MPort>(mm2px(Vec(10.16, 98.645)), module, Gaussian::TRIGGER_INPUT));
+
+		addOutput(createOutputCentered<PJ301MPort>(mm2px(Vec(10.16, 113.475)), module, Gaussian::CV_OUTPUT));
 	}
 };
 

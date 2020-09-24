@@ -31,11 +31,29 @@
     {
       "slug": "HookeOsc",
       "name": "HookeOsc",
-      "description": "",
+      "description": "A cheap sinusoidal oscillator",
       "tags": [
         "VCO",
         "Polyphonic"
       ]
+    },
+    {
+      "slug": "PSwitch",
+      "name": "PSwitch",
+      "description": "Cumulative probability switch",
+      "tags": []
+    },
+    {
+      "slug": "LogMapOsc",
+      "name": "LogMapOsc",
+      "description": "",
+      "tags": []
+    },
+    {
+      "slug": "TriliumCV",
+      "name": "TriliumCV",
+      "description": "",
+      "tags": []
     }
   ]
 }

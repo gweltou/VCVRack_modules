@@ -11,3 +11,6 @@ extern Plugin* pluginInstance;
 extern Model* modelGaussian;
 extern Model* modelWobble;
 extern Model* modelHookeOsc;
+extern Model* modelPSwitch;
+extern Model* modelLogMapOsc;
+extern Model* modelTriliumCV;
