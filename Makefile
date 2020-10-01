@@ -12,8 +12,6 @@ LDFLAGS +=
 
 # Add .cpp files to the build
 SOURCES += $(wildcard src/*.cpp)
-
-# Add .c files to the build
 SOURCES += $(wildcard src/*.c)
 
 # Add files to the ZIP package when running `make dist`
@@ -24,9 +22,11 @@ DISTRIBUTABLES += $(wildcard LICENSE*)
 # Static libs
 libsamplerate := dep/lib/libsamplerate.a
 OBJECTS += $(libsamplerate)
+#OBJECTS += rs232.o
 
 # Dependencies
 DEPS += $(libsamplerate)
+#DEPS += rs232.o
 
 $(libsamplerate):
 	$(WGET) http://www.mega-nerd.com/SRC/libsamplerate-0.1.9.tar.gz
@@ -34,6 +34,9 @@ $(libsamplerate):
 	cd dep/libsamplerate-0.1.9 && $(CONFIGURE)
 	cd dep/libsamplerate-0.1.9/src && $(MAKE)
 	cd dep/libsamplerate-0.1.9/src && $(MAKE) install
+
+rs232.o : rs232.h rs232.c
+	gcc $(CFLAGS) -c rs232.c -o rs232.o
 
 # Include the Rack plugin Makefile framework
 include $(RACK_DIR)/plugin.mk

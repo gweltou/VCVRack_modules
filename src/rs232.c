@@ -38,8 +38,7 @@
 #define RS232_PORTNR  38
 
 
-int Cport[RS232_PORTNR],
-    error;
+int Cport[RS232_PORTNR];
 
 struct termios new_port_settings,
        old_port_settings[RS232_PORTNR];
@@ -209,8 +208,10 @@ http://man7.org/linux/man-pages/man3/termios.3.html
     perror("Another process has locked the comport.");
     return(1);
   }
-
-  error = tcgetattr(Cport[comport_number], old_port_settings + comport_number);
+  printf("ça passe\n");
+  int error = tcgetattr(Cport[comport_number], old_port_settings + comport_number);
+  printf("ça passe encore\n");
+  fflush(NULL);
   if(error==-1)
   {
     close(Cport[comport_number]);
