@@ -1,11 +1,21 @@
-# Gaussian sample & hold
+# VCV Rack plugins
 
-A simple sample & hold module with a gaussian distribution for VCV Rack.
+![Plate](/manual/plates.png)
 
-It outputs a random CV value with each trigger it gets.
+## Gaussian
 
-You have control over the standard deviation (sigma) and the mean of the distribution (mu). These two parameters have dedicated CV inputs.
+A simple sample & hold module with a gaussian distribution.
 
-When the trigger input is not connected, the module outputs gaussian noise (which takes more CPU time than other kind of noises...)
+It outputs a new random CV value with each trigger it gets.
 
-![Plate](/manual/gaussian_plate.png)
+You have control over the standard deviation (sigma) and the mean of the distribution (mu).
+
+When the trigger input is not connected, the module outputs gaussian noise.
+
+## LogMapOSC
+
+An oscilator based on the LogMap function.
+
+## PSwitch
+
+Source from one of the 8 inputs randomly.

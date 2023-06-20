@@ -1,14 +1,14 @@
 {
   "slug": "Gweltou",
   "name": "Gweltou",
-  "version": "1.0.0",
+  "version": "2.0.0",
   "license": "MIT",
   "author": "Gweltaz D-G",
   "authorEmail": "gweltou@hotmail.com",
-  "authorUrl": "",
-  "pluginUrl": "",
+  "authorUrl": "https://github.com/gweltou",
+  "pluginUrl": "https://github.com/gweltou/VCVRack_modules",
   "manualUrl": "",
-  "sourceUrl": "",
+  "sourceUrl": "https://github.com/gweltou/VCVRack_modules",
   "donateUrl": "",
   "changelogUrl": "",
   "modules": [
